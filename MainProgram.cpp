@@ -10,6 +10,7 @@
 #include <iostream>
 #include <string>
 #include <cstring>
+#include <cctype>
 using namespace std;
 
 // ================================
@@ -19,13 +20,6 @@ using namespace std;
 // -----------------------------------------------------------
 // Class: Student
 // Represents a university student with name, ID, and GPA.
-// This class reviews:
-//   - Encapsulation (private data, public interface)
-//   - Constructors (default, parameterized)
-//   - Destructor
-//   - Copy Constructor
-//   - Operator Overloading (<<, ==, <)
-//   - String operations
 // -----------------------------------------------------------
 class Student {
 private:
@@ -36,96 +30,95 @@ private:
 public:
     // ----- Task 1: Constructors & Destructor -----
 
-    // TODO 1a: Default constructor
-    // Set name to "Unknown", id to 0, gpa to 0.0
+    // Default constructor
     Student() {
-        // YOUR CODE HERE
+        name = "Unknown";
+        id = 0;
+        gpa = 0.0;
     }
 
-    // TODO 1b: Parameterized constructor
-    // Initialize all three member variables from parameters
+    // Parameterized constructor
     Student(string n, int i, double g) {
-        // YOUR CODE HERE
+        name = n;
+        id = i;
+        gpa = g;
     }
 
-    // TODO 1c: Copy constructor
-    // Create a deep copy of another Student object
+    // Copy constructor
     Student(const Student& other) {
-        // YOUR CODE HERE
+        name = other.name;
+        id = other.id;
+        gpa = other.gpa;
     }
 
-    // TODO 1d: Destructor
-    // Print: "Student [name] destroyed"
+    // Destructor
     ~Student() {
-        // YOUR CODE HERE
+        cout << "Student " << name << " destroyed" << endl;
     }
 
     // ----- Task 2: Getters (Encapsulation) -----
 
-    // TODO 2a: Getter for name
+    // Getter for name
     string getName() const {
-        // YOUR CODE HERE
-        return "";
+        return name;
     }
 
-    // TODO 2b: Getter for id
+    // Getter for id
     int getId() const {
-        // YOUR CODE HERE
-        return 0;
+        return id;
     }
 
-    // TODO 2c: Getter for gpa
+    // Getter for gpa
     double getGpa() const {
-        // YOUR CODE HERE
-        return 0.0;
+        return gpa;
     }
 
     // ----- Task 3: Setters with Validation -----
 
-    // TODO 3a: Setter for name
-    // Name must not be empty. If empty, keep current name.
+    // Setter for name
     void setName(string n) {
-        // YOUR CODE HERE
+        if (!n.empty()) {
+            name = n;
+        }
     }
 
-    // TODO 3b: Setter for GPA
-    // GPA must be between 0.0 and 4.0 (inclusive).
-    // If out of range, keep current GPA.
+    // Setter for GPA
     void setGpa(double g) {
-        // YOUR CODE HERE
+        if (g >= 0.0 && g <= 4.0) {
+            gpa = g;
+        }
     }
 
     // ----- Task 4: String Operation -----
 
-    // TODO 4: getFormattedName()
-    // Return the name in UPPERCASE
-    // Hint: loop through each character and use toupper()
+    // Return the name in uppercase
     string getFormattedName() const {
-        // YOUR CODE HERE
-        return "";
+        string upperName = name;
+
+        for (int i = 0; i < upperName.length(); i++) {
+            upperName[i] = toupper(upperName[i]);
+        }
+
+        return upperName;
     }
 
     // ----- Task 5: Operator Overloading -----
 
-    // TODO 5a: Equality operator (==)
-    // Two students are equal if they have the same id
+    // Equality operator
     bool operator==(const Student& other) const {
-        // YOUR CODE HERE
-        return false;
+        return id == other.id;
     }
 
-    // TODO 5b: Less-than operator (<)
-    // Compare by GPA (lower GPA = "less than")
+    // Less-than operator
     bool operator<(const Student& other) const {
-        // YOUR CODE HERE
-        return false;
+        return gpa < other.gpa;
     }
 
-    // TODO 5c: Stream insertion operator (<<)
-    // Format: "Student(name, ID: id, GPA: gpa)"
-    // Example: "Student(Ali, ID: 101, GPA: 3.5)"
+    // Stream insertion operator
     friend ostream& operator<<(ostream& os, const Student& s) {
-        // YOUR CODE HERE
+        os << "Student(" << s.name
+           << ", ID: " << s.id
+           << ", GPA: " << s.gpa << ")";
         return os;
     }
 };
@@ -134,17 +127,25 @@ public:
 // STANDALONE FUNCTION
 // ================================
 
-// TODO 6: Function Overloading - findBestStudent
-// Version 1: Takes two Student references, returns the one with higher GPA
+// Version 1: Compare two students
 Student findBestStudent(const Student& a, const Student& b) {
-    // YOUR CODE HERE
-    return a;
+    if (a.getGpa() > b.getGpa()) {
+        return a;
+    }
+    return b;
 }
 
-// Version 2: Takes an array of Students and its size, returns the one with highest GPA
+// Version 2: Compare array of students
 Student findBestStudent(Student arr[], int size) {
-    // YOUR CODE HERE
-    return arr[0];
+    Student best = arr[0];
+
+    for (int i = 1; i < size; i++) {
+        if (arr[i].getGpa() > best.getGpa()) {
+            best = arr[i];
+        }
+    }
+
+    return best;
 }
 
 // ================================
